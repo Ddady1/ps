@@ -33,9 +33,9 @@ class App(ttkb.Window):
                                          'This tool combines the power of Powershell commands and Python GUI.\n\n'
                                          'Please choose which environment to use.', font=('Helvetica', 12), bootstyle='primary')
         main_frame_lbl.place(x=20, y=30)
-        azuread_btn = ttkb.Button(text='Azure Active Directory')
+        azuread_btn = ttkb.Button(text='Azure Active Directory', command=self.azure_ad)
         azuread_btn.place(x=20, y=120)
-        ad_btn = ttkb.Button(text='Active Directory Onprem')
+        ad_btn = ttkb.Button(text='Active Directory On Prem', command=self.ad_onprem)
         ad_btn.place(x=20, y=160)
         cancel_btn = ttkb.Button(text='Exit', width=10, command=self.quit)
         cancel_btn.place(x=500, y=350)
@@ -45,7 +45,18 @@ class App(ttkb.Window):
     windll.shcore.SetProcessDpiAwareness(1)
 
 
+    def ad_onprem(self):
+        root = Toplevel()
+        root.title('Active Directory On Prem Tool')
+        root.geometry('600x400+170+170')
+        root.mainloop()
 
+
+    def azure_ad(self):
+        root = Toplevel()
+        root.title('Azure Active Directory Tool')
+        root.geometry('600x400+170+170')
+        root.mainloop()
 
 command = 'Get-Aduser benc -Properties * -ErrorAction Stop | fl Enabled, LockedOut, PasswordExpired, whenCreated'
 result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
