@@ -29,14 +29,15 @@ class App(ttkb.Window):
     #def create_buttons(self):
         main_frame = ttkb.LabelFrame(text='Powershell Toolkit', width=580, height=100)
         main_frame.place(x=10, y=10)
-        main_frame_lbl = ttkb.Label(text='Powershell Toolkit is a power tool for administrating microsoft enviroment.\n'
-                                         'Please choose which tool to use.')
+        main_frame_lbl = ttkb.Label(text='Powershell Toolkit is a power tool for administrating microsoft environments.\n'
+                                         'This tool combines the power of Powershell commands and Python GUI.\n\n'
+                                         'Please choose which environment to use.', font=('Helvetica', 12), bootstyle='primary')
         main_frame_lbl.place(x=20, y=30)
         azuread_btn = ttkb.Button(text='Azure Active Directory')
         azuread_btn.place(x=20, y=120)
         ad_btn = ttkb.Button(text='Active Directory Onprem')
         ad_btn.place(x=20, y=160)
-        cancel_btn = ttkb.Button(text='EXIT', width=10, command=self.quit)
+        cancel_btn = ttkb.Button(text='Exit', width=10, command=self.quit)
         cancel_btn.place(x=500, y=350)
 
 
