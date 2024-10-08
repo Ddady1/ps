@@ -73,13 +73,22 @@ class App(ttkb.Window):
         username_en.bind("<Button-1>", lambda e: username_en.delete(0, tk.END))
         username_en.place(x=30, y=50)
         username_en.insert(0, 'Please enter user name')
-        get_stat_btn = ttkb.Button(root, text='Get Statistics', command=lambda: print(user_name.get()))
+        #identity = user_name.get()
+        #print(identity)
+        get_stat_btn = ttkb.Button(root, text='Get Statistics', command=lambda: self.get_aduser_stat_ps(user_name.get()))
         get_stat_btn.place(x=230, y=50)
         root.mainloop()
 
+    def get_aduser_stat_ps(self, username):
+        print(username)
+        command = f'Get-Aduser -identity {username} -Properties * -ErrorAction Stop | fl Enabled, LockedOut, PasswordExpired, whenCreated'
+        result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
+        print(result.stdout)
 
 
-command = 'Get-Aduser benc -Properties * -ErrorAction Stop | fl Enabled, LockedOut, PasswordExpired, whenCreated'
+
+
+'''command = 'Get-Aduser benc -Properties * -ErrorAction Stop | fl Enabled, LockedOut, PasswordExpired, whenCreated'
 result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
 ans = result.stdout
 print(ans)
@@ -105,7 +114,7 @@ print(starmoon)
 
 
 li = list(ans.split(' '))
-print(li)
+print(li)'''
 
 if __name__ == '__main__':
     app = App()
