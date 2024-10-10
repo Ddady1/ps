@@ -11,7 +11,9 @@ from PIL import Image, ImageTk
 img = img.resize((100, 100), Image.LANCZOS)'''
 
 img = 'assets/powershell_icon.ico'
-global id_
+
+
+
 def ad_onprem():
     root = Toplevel()
     root.title('Active Directory On Prem Tool')
@@ -44,20 +46,15 @@ def get_aduser_stat_win():
     #print(identity)
     get_stat_btn = ttkb.Button(root, text='Get Statistics', command=lambda: get_aduser_stat_ps(user_name.get()))
     get_stat_btn.place(x=230, y=50)
-    ad_user_stat_lb = ttkb.Label(root, text=id_, width=50)
+    ad_user_stat_lb = ttkb.Label(root, textvariable=user_stat_var, width=50)
     ad_user_stat_lb.place(x=30, y=100)
     root.mainloop()
 
 def get_aduser_stat_ps(username):
 
-    print(username)
     command = f'Get-Aduser -identity {username} -Properties * -ErrorAction Stop | fl Enabled, LockedOut, PasswordExpired, whenCreated'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
-    #print(result.stdout)
-    id_ = result.stdout
-
-
-
+    user_stat_var.set(result.stdout)
 
 
 window = ttkb.Window(themename='sandstone')
@@ -65,8 +62,8 @@ window.title('Powershell Toolkit')
 window.geometry('600x400+150+150')
 window.iconbitmap(img)
 
-m = ttkb.StringVar
-    #def create_buttons(self):
+user_stat_var = ttkb.StringVar()
+
 main_frame = ttkb.LabelFrame(window, text='Powershell Toolkit', width=580, height=100)
 main_frame.place(x=10, y=10)
 main_frame_lbl = ttkb.Label(window, text='Powershell Toolkit is a power tool for administrating microsoft environments.\n'
