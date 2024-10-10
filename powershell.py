@@ -13,8 +13,8 @@ img = img.resize((100, 100), Image.LANCZOS)'''
 img = 'assets/powershell_icon.ico'
 
 
-
 def ad_onprem():
+
     root = Toplevel()
     root.title('Active Directory On Prem Tool')
     root.geometry('600x400+170+170')
@@ -26,6 +26,7 @@ def ad_onprem():
 
 
 def azure_ad():
+
     root = Toplevel()
     root.title('Azure Active Directory Tool')
     root.geometry('600x400+170+170')
@@ -33,22 +34,27 @@ def azure_ad():
     cancel_btn.place(x=500, y=350)
     root.mainloop()
 
+
 def get_aduser_stat_win():
+
     root = Toplevel()
     root.title('Get user statistics')
     root.geometry('600x300+180+180')
     user_name = ttkb.StringVar()
     username_en = ttkb.Entry(root, textvariable=user_name, width=30)
     username_en.bind("<Button-1>", lambda e: username_en.delete(0, tk.END))
-    username_en.place(x=30, y=50)
+    username_en.place(x=30, y=30)
     username_en.insert(0, 'Please enter user name')
-    #identity = user_name.get()
-    #print(identity)
+    stat_frame_lbf = ttkb.LabelFrame(root, text='User Statistics', width=290, height=200)
+    stat_frame_lbf.place(x=30, y=80)
     get_stat_btn = ttkb.Button(root, text='Get Statistics', command=lambda: get_aduser_stat_ps(user_name.get()))
-    get_stat_btn.place(x=230, y=50)
-    ad_user_stat_lb = ttkb.Label(root, textvariable=user_stat_var, width=50)
-    ad_user_stat_lb.place(x=30, y=100)
+    get_stat_btn.place(x=230, y=30)
+    ad_user_stat_lb = ttkb.Label(stat_frame_lbf, textvariable=user_stat_var)
+    ad_user_stat_lb.place(x=10, y=1)
+    cancel_btn = ttkb.Button(root, text='Exit', width=10, command=root.destroy)
+    cancel_btn.place(x=500, y=250)
     root.mainloop()
+
 
 def get_aduser_stat_ps(username):
 
@@ -57,12 +63,20 @@ def get_aduser_stat_ps(username):
     user_stat_var.set(result.stdout)
 
 
+# Create Main Window
+
 window = ttkb.Window(themename='sandstone')
 window.title('Powershell Toolkit')
 window.geometry('600x400+150+150')
 window.iconbitmap(img)
 
+
+# Create Variables
+
 user_stat_var = ttkb.StringVar()
+
+
+# Create main window frame, labels and buttons
 
 main_frame = ttkb.LabelFrame(window, text='Powershell Toolkit', width=580, height=100)
 main_frame.place(x=10, y=10)
