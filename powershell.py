@@ -58,9 +58,43 @@ def get_aduser_stat_win():
 
 def get_aduser_stat_ps(username):
 
-    command = f'Get-Aduser -identity {username} -Properties * -ErrorAction Stop | fl Enabled, LockedOut, PasswordExpired, whenCreated'
+    command = f'Get-Aduser -identity {username} -Properties * -ErrorAction Stop | fl DisplayName, EmailAddress,' \
+              f' Enabled, LockedOut, PasswordExpired, whenCreated'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
     user_stat_var.set(result.stdout)
+    cleanstat = clean_reults(user_stat_var)
+    print(cleanstat)
+
+
+def clean_reults(results):
+    strlight = ''
+    for i in results:
+        if i == ' ':
+            continue
+        else:
+            strlight += i
+    #print(strlight)
+    clean_strlight = strlight.replace('\n', ' ')
+    #print(clean_strlight)
+    '''starmoon = ''
+    for i in strlight:
+        if i == '\n':
+            continue
+        else:
+            starmoon += i
+    # print(starmoon)'''
+
+    li = list(clean_strlight.split(' '))
+    print(li)
+    completelist = []
+    for i in li:
+        if i == '':
+            continue
+        else:
+            completelist.append(i)
+
+    #print(completelist)
+    return completelist
 
 
 # Create Main Window
@@ -74,6 +108,7 @@ window.iconbitmap(img)
 # Create Variables
 
 user_stat_var = ttkb.StringVar()
+
 
 
 # Create main window frame, labels and buttons
