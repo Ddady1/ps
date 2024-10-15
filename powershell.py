@@ -18,8 +18,25 @@ def ad_onprem():
     root = Toplevel()
     root.title('Active Directory On Prem Tool')
     root.geometry('600x400+170+170')
-    get_ADuser_stat_btn = ttkb.Button(root, text='Get user statistics', command=get_aduser_stat_win)
-    get_ADuser_stat_btn.place(x=20, y=20)
+    cb_options = ['Get user statistics', 'Get user Groups']
+    user_name = ttkb.StringVar()
+    username_en = ttkb.Entry(root, textvariable=user_name, width=30)
+    username_en.bind("<Button-1>", lambda e: username_en.delete(0, tk.END))
+    username_en.place(x=20, y=20)
+    username_en.insert(0, 'Please enter user name')
+    ad_oprem_cb = ttkb.Combobox(root, values=cb_options, style='primary', width=30)
+    ad_oprem_cb.place(x=240, y=20)
+    ad_oprem_cb.current(0)
+    get_info_btn = ttkb.Button(root, text='Get Info.', width=10, command=lambda: get_aduser_stat_ps(user_name.get()))
+    get_info_btn.place(x=450, y=20)
+    stat_frame_lbf = ttkb.LabelFrame(root, text='User Statistics', width=460, height=280)
+    stat_frame_lbf.place(x=20, y=70)
+    clean = clean_reults(clean_stat_var.get())
+    clean = ''.join(clean)
+    ad_user_stat_lb = ttkb.Label(stat_frame_lbf, text=clean)
+    ad_user_stat_lb.place(x=1, y=1)
+    #get_ADuser_stat_btn = ttkb.Button(root, text='Get user statistics', command=get_aduser_stat_win)
+    #get_ADuser_stat_btn.place(x=20, y=20)
     cancel_btn = ttkb.Button(root, text='Exit', width=10, command=root.destroy)
     cancel_btn.place(x=500, y=350)
     root.mainloop()
@@ -35,7 +52,7 @@ def azure_ad():
     root.mainloop()
 
 
-def get_aduser_stat_win():
+'''def get_aduser_stat_win():
 
     root = Toplevel()
     root.title('Get user statistics')
@@ -49,11 +66,12 @@ def get_aduser_stat_win():
     stat_frame_lbf.place(x=30, y=80)
     get_stat_btn = ttkb.Button(root, text='Get Statistics', command=lambda: get_aduser_stat_ps(user_name.get()))
     get_stat_btn.place(x=230, y=30)
-    ad_user_stat_lb = ttkb.Label(stat_frame_lbf, textvariable=user_stat_var)
+    clean_stat = clean_reults(user_stat_var.get())
+    ad_user_stat_lb = ttkb.Label(stat_frame_lbf, text=clean_stat)
     ad_user_stat_lb.place(x=10, y=1)
     cancel_btn = ttkb.Button(root, text='Exit', width=10, command=root.destroy)
     cancel_btn.place(x=500, y=250)
-    root.mainloop()
+    root.mainloop()'''
 
 
 def get_aduser_stat_ps(username):
@@ -62,7 +80,7 @@ def get_aduser_stat_ps(username):
               f' Enabled, LockedOut, PasswordExpired, whenCreated'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
     user_stat_var.set(result.stdout)
-    cleanstat = clean_reults(user_stat_var)
+    cleanstat = clean_reults(user_stat_var.get())
     print(cleanstat)
 
 
@@ -92,9 +110,11 @@ def clean_reults(results):
             continue
         else:
             completelist.append(i)
-
+    cap_list = []
+    for i in completelist:
+        cap_list.append(i.capitalize())
     #print(completelist)
-    return completelist
+    return cap_list
 
 
 # Create Main Window
@@ -108,6 +128,7 @@ window.iconbitmap(img)
 # Create Variables
 
 user_stat_var = ttkb.StringVar()
+clean_stat_var = ttkb.StringVar()
 
 
 
