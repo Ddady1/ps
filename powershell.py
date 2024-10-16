@@ -1,4 +1,5 @@
 import subprocess
+import time
 import tkinter as tk
 from tkinter import ttk
 from ctypes import windll
@@ -12,7 +13,7 @@ img = img.resize((100, 100), Image.LANCZOS)'''
 
 img = 'assets/powershell_icon.ico'
 
-
+info = ''
 def ad_onprem():
 
     root = Toplevel()
@@ -31,9 +32,9 @@ def ad_onprem():
     get_info_btn.place(x=450, y=20)
     stat_frame_lbf = ttkb.LabelFrame(root, text='User Statistics', width=460, height=280)
     stat_frame_lbf.place(x=20, y=70)
-    clean = clean_reults(clean_stat_var.get())
-    clean = ''.join(clean)
-    ad_user_stat_lb = ttkb.Label(stat_frame_lbf, text=clean)
+    #clean = clean_results(clean_stat_var.get())
+    #clean = ''.join(clean)
+    ad_user_stat_lb = ttkb.Label(stat_frame_lbf, text=info)
     ad_user_stat_lb.place(x=1, y=1)
     #get_ADuser_stat_btn = ttkb.Button(root, text='Get user statistics', command=get_aduser_stat_win)
     #get_ADuser_stat_btn.place(x=20, y=20)
@@ -76,15 +77,17 @@ def azure_ad():
 
 def get_aduser_stat_ps(username):
 
+    global info
     command = f'Get-Aduser -identity {username} -Properties * -ErrorAction Stop | fl DisplayName, EmailAddress,' \
               f' Enabled, LockedOut, PasswordExpired, whenCreated'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
     user_stat_var.set(result.stdout)
-    cleanstat = clean_reults(user_stat_var.get())
-    print(cleanstat)
+    info = user_stat_var.get()
+    #info = clean_results(user_stat_var.get())
+    print(info)
 
 
-def clean_reults(results):
+def clean_results(results) -> str:
     strlight = ''
     for i in results:
         if i == ' ':
