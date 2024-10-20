@@ -41,7 +41,7 @@ def ad_onprem():
     ad_user_stat_lb.place(x=1, y=1)
     #get_ADuser_stat_btn = ttkb.Button(root, text='Get user statistics', command=get_aduser_stat_win)
     #get_ADuser_stat_btn.place(x=20, y=20)
-    copy_btn = ttkb.Button(root, text='Copy to Clipboard', command=root.clipboard_append(info))
+    copy_btn = ttkb.Button(root, text='Copy to Clipboard', command=lambda: root.clipboard_append(info))
     copy_btn.place(x=485, y=100)
     cancel_btn = ttkb.Button(root, text='Exit', width=10, command=root.destroy)
     cancel_btn.place(x=500, y=350)
@@ -55,12 +55,6 @@ def printinfo():
     resilts_lb = ttkb.Label(root, text=info)
     resilts_lb.pack()
 
-def copytoclip(results):
-    r = Tk()
-    r.clipboard_clear()
-    r.clipboard_append(results)
-    r.destroy()
-
 
 def azure_ad():
 
@@ -71,6 +65,9 @@ def azure_ad():
     cancel_btn.place(x=500, y=350)
     root.mainloop()
 
+def get_aduser_groups():
+    # Get-ADPrincipalGroupMembership -Identity dady | fl name, GroupCategory, GroupScope
+    pass
 
 '''def get_aduser_stat_win():
 
