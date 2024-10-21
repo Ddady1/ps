@@ -15,8 +15,10 @@ img = img.resize((100, 100), Image.LANCZOS)'''
 img = 'assets/powershell_icon.ico'
 
 info = ''
+index = ''
 def ad_onprem():
     global info
+    global index
     root = Toplevel()
     root.title('Active Directory On Prem Tool')
     root.geometry('630x400+170+170')
@@ -27,10 +29,11 @@ def ad_onprem():
     username_en.bind("<Button-1>", lambda e: username_en.delete(0, tk.END))
     username_en.place(x=20, y=20)
     username_en.insert(0, 'Please enter user name')
-    ad_oprem_cb = ttkb.Combobox(root, values=cb_options, style='primary', width=30)
+    ad_oprem_cb = ttkb.Combobox(root, values=cb_options, style='primary', width=30, state='readonly')
     ad_oprem_cb.place(x=240, y=20)
     ad_oprem_cb.current(0)
-    get_info_btn = ttkb.Button(root, text='Get Info.', width=10, command=lambda: get_aduser_stat_ps(user_name.get(), ad_user_stat_lb))
+    get_info_btn = ttkb.Button(root, text='Get Info.', width=10,
+                               command=lambda: get_aduser_stat_ps(user_name.get(), ad_user_stat_lb))
     get_info_btn.place(x=450, y=20)
     stat_frame_lbf = ttkb.LabelFrame(root, text='User Statistics', width=460, height=280)
     stat_frame_lbf.place(x=20, y=70)
@@ -46,6 +49,12 @@ def ad_onprem():
     cancel_btn = ttkb.Button(root, text='Exit', width=10, command=root.destroy)
     cancel_btn.place(x=500, y=350)
     root.mainloop()
+
+
+def get_combox_selection(event):
+    pass
+
+
 
 def printinfo():
     root = Toplevel()
@@ -65,9 +74,13 @@ def azure_ad():
     cancel_btn.place(x=500, y=350)
     root.mainloop()
 
-def get_aduser_groups():
-    # Get-ADPrincipalGroupMembership -Identity dady | fl name, GroupCategory, GroupScope
-    pass
+def get_aduser_groups(username, info_label):
+    global info
+    command = f'Get-ADPrincipalGroupMembership -Identity {username} | fl name, GroupCategory, GroupScope'
+    result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
+    user_stat_var.set(result.stdout)
+    info = user_stat_var.get()
+    info_label.config(text=info)
 
 '''def get_aduser_stat_win():
 
@@ -91,16 +104,16 @@ def get_aduser_groups():
     root.mainloop()'''
 
 
-def get_aduser_stat_ps(username, lable):
+def get_aduser_stat_ps(username, info_label):
 
     global info
-    lable.config(text=info)
+    #info_label.config(text=info)
     command = f'Get-Aduser -identity {username} -Properties * -ErrorAction Stop | fl DisplayName, EmailAddress,' \
               f' Enabled, LockedOut, PasswordExpired, whenCreated'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
     user_stat_var.set(result.stdout)
     info = user_stat_var.get()
-    lable.config(text=info)
+    info_label.config(text=info)
     #info = clean_results(user_stat_var.get())
     #print(info)
     #printinfo()
