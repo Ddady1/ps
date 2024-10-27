@@ -31,11 +31,14 @@ def on_prem_layout():
     ad_oprem_cb.grid(row=0, column=1, padx=5)
     get_info_btn = ttkb.Button(right_frame, text='Get Info.')
     get_info_btn.grid(row=0, column=2)
+    info_lbf = ttkb.LabelFrame(right_frame, text='Information', width=400, height=200)
+    info_lbf.grid(row=1, column=0, columnspan=6, sticky=W, padx=5, pady=10)
 # Create Main Window
 
 window = ttkb.Window(themename='sandstone')
 window.title('Powershell Toolkit')
 window.geometry('1000x600+150+150')
+window.minsize(1000, 600)
 window.iconbitmap(img)
 
 windll.shcore.SetProcessDpiAwareness(1)
