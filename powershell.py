@@ -32,8 +32,10 @@ def ad_onprem():
     ad_oprem_cb = ttkb.Combobox(root, values=cb_options, style='primary', width=30, state='readonly')
     ad_oprem_cb.place(x=240, y=20)
     ad_oprem_cb.current(0)
+    #get_info_btn = ttkb.Button(root, text='Get Info.', width=10,
+                               #command=lambda: get_aduser_stat_ps(user_name.get(), ad_user_stat_lb))
     get_info_btn = ttkb.Button(root, text='Get Info.', width=10,
-                               command=lambda: get_aduser_stat_ps(user_name.get(), ad_user_stat_lb))
+                               command=lambda: get_aduser_groups(user_name.get(), ad_user_stat_lb))
     get_info_btn.place(x=450, y=20)
     stat_frame_lbf = ttkb.LabelFrame(root, text='User Statistics', width=460, height=280)
     stat_frame_lbf.place(x=20, y=70)
@@ -51,7 +53,8 @@ def ad_onprem():
     root.mainloop()
 
 
-def get_combox_selection(event):
+def get_combox_selection(e):
+
     pass
 
 
