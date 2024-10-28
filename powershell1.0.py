@@ -13,10 +13,31 @@ from tkinter import Tk
 img = img.resize((100, 100), Image.LANCZOS)'''
 
 img = 'assets/powershell_icon.ico'
-
+info = ''
 
 def exit_btn():
     window.destroy()
+
+
+def get_index(*arg):
+    if combobox_var.get() == 'Get user statistics':
+        get_info_var.set('1')
+    elif combobox_var.get() == 'Get user Groups':
+        get_info_var.set('2')
+    else:
+        print('Please choose an option')
+
+
+def selected_ps(infolb):
+    if get_info_var.get() == '1':
+        get_user_stats(infolb)
+
+def get_user_stats(infolb):
+    global info
+    command = f'Get-Aduser -identity {username_var.get()} -Properties * -ErrorAction Stop | fl DisplayName, EmailAddress,' \
+              f' Enabled, LockedOut, PasswordExpired, whenCreated, Title'
+    result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
+    infolb.config(text=result.stdout)
 
 
 def on_prem_layout():
@@ -26,13 +47,20 @@ def on_prem_layout():
     username_en.insert(0, 'Please enter user name')
     username_en.bind("<Button-1>", lambda e: username_en.delete(0, tk.END))
     username_en.grid(row=0, column=0, padx=5)
-    cb_options = ['Get user statistics', 'Get user Groups']
-    ad_oprem_cb = ttkb.Combobox(right_frame, values=cb_options, style='primary', width=30, state='readonly')
+    cb_options = ['Please choose an option', 'Get user statistics', 'Get user Groups']
+    ad_oprem_cb = ttkb.Combobox(right_frame, values=cb_options, style='primary', width=30, state='readonly', textvariable=combobox_var)
+    ad_oprem_cb.current(0)
     ad_oprem_cb.grid(row=0, column=1, padx=5)
-    get_info_btn = ttkb.Button(right_frame, text='Get Info.')
+    combobox_var.trace('w', get_index)
+    get_info_btn = ttkb.Button(right_frame, text='Get Info.', command=lambda: selected_ps(info_lb))
     get_info_btn.grid(row=0, column=2)
-    info_lbf = ttkb.LabelFrame(right_frame, text='Information', width=400, height=200)
-    info_lbf.grid(row=1, column=0, columnspan=6, sticky=W, padx=5, pady=10)
+    info_lbf = ttkb.LabelFrame(right_frame, text='Information', width=600, height=400)
+    #info_lbf.grid(row=1, column=0, columnspan=6, sticky=W, padx=5, pady=10)
+    info_lbf.place(x=8, y=50)
+    info_lb = ttkb.Label(info_lbf, text=info)
+    info_lb.place(x=1, y=1)
+
+
 # Create Main Window
 
 window = ttkb.Window(themename='sandstone')
@@ -47,6 +75,8 @@ windll.shcore.SetProcessDpiAwareness(1)
 # Variables
 
 username_var = ttkb.StringVar()
+combobox_var = ttkb.StringVar()
+get_info_var = ttkb.StringVar()
 
 
 # Frames
