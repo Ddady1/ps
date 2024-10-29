@@ -24,6 +24,8 @@ def get_index(*arg):
         get_info_var.set('1')
     elif combobox_var.get() == 'Get user Groups':
         get_info_var.set('2')
+    elif combobox_var.get() == 'Get Locked out users list':
+        get_info_var.set('3')
     else:
         print('Please choose an option')
 
@@ -31,13 +33,26 @@ def get_index(*arg):
 def selected_ps(infolb):
     if get_info_var.get() == '1':
         get_user_stats(infolb)
+    elif get_info_var.get() == '3':
+        get_lockedout_users(infolb)
+
+
+def get_lockedout_users(infolb):
+
+    global info
+    command = f'Search-ADAccount –LockedOut | select Name, SamAccountName'
+    result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
+    infolb.config(text=result.stdout)
 
 def get_user_stats(infolb):
     global info
     command = f'Get-Aduser -identity {username_var.get()} -Properties * -ErrorAction Stop | fl DisplayName, EmailAddress,' \
               f' Enabled, LockedOut, PasswordExpired, whenCreated, Title'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
-    infolb.config(text=result.stdout)
+    if result.stdout != '':
+        infolb.config(text=result.stdout)
+    else:
+        infolb.config(text='GREAT!!! No locked-out accounts :-)')
 
 
 def on_prem_layout():
@@ -47,7 +62,7 @@ def on_prem_layout():
     username_en.insert(0, 'Please enter user name')
     username_en.bind("<Button-1>", lambda e: username_en.delete(0, tk.END))
     username_en.grid(row=0, column=0, padx=5)
-    cb_options = ['Please choose an option', 'Get user statistics', 'Get user Groups']
+    cb_options = ['Please choose an option', 'Get user statistics', 'Get user Groups', 'Get Locked out users list']
     ad_oprem_cb = ttkb.Combobox(right_frame, values=cb_options, style='primary', width=30, state='readonly', textvariable=combobox_var)
     ad_oprem_cb.current(0)
     ad_oprem_cb.grid(row=0, column=1, padx=5)
