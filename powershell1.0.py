@@ -16,25 +16,45 @@ img = 'assets/powershell_icon.ico'
 info = ''
 
 def exit_btn():
+
     window.destroy()
 
 
 def get_index(*arg):
+
     if combobox_var.get() == 'Get user statistics':
         get_info_var.set('1')
     elif combobox_var.get() == 'Get user Groups':
         get_info_var.set('2')
     elif combobox_var.get() == 'Get Locked out users list':
         get_info_var.set('3')
+    elif combobox_var.get() == 'Get never expired users list':
+        get_info_var.set('4')
     else:
         print('Please choose an option')
 
 
 def selected_ps(infolb):
+
     if get_info_var.get() == '1':
         get_user_stats(infolb)
+    elif get_info_var.get() == '2':
+        get_user_membership(infolb)
     elif get_info_var.get() == '3':
         get_lockedout_users(infolb)
+    elif get_info_var.get() == '4':
+        get_neverexpiered_users(infolb)
+
+
+def get_neverexpiered_users(infolb):
+
+    global info
+    command = f'get-aduser -filter * -properties Name, PasswordNeverExpires | where {{ $_.passwordNeverExpires -eq "true" }} | where {{$_.enabled -eq "true"}}| Format-Table -Property Name, PasswordNeverExpires -AutoSize'
+    result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
+    if result.stdout:
+        infolb.config(text=result.stdout)
+    else:
+        infolb.config(text='Great!!! No users with Never Expired password')
 
 
 def get_lockedout_users(infolb):
@@ -42,27 +62,45 @@ def get_lockedout_users(infolb):
     global info
     command = f'Search-ADAccount –LockedOut | select Name, SamAccountName'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
-    infolb.config(text=result.stdout)
-
-def get_user_stats(infolb):
-    global info
-    command = f'Get-Aduser -identity {username_var.get()} -Properties * -ErrorAction Stop | fl DisplayName, EmailAddress,' \
-              f' Enabled, LockedOut, PasswordExpired, whenCreated, Title'
-    result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
-    if result.stdout != '':
+    if result.stdout:
         infolb.config(text=result.stdout)
     else:
         infolb.config(text='GREAT!!! No locked-out accounts :-)')
 
+def get_user_stats(infolb):
+
+    global info
+    command = f'Get-Aduser -identity {username_var.get()} -Properties * -ErrorAction Stop | fl DisplayName, EmailAddress,' \
+              f' Enabled, LockedOut, PasswordExpired, whenCreated, Title'
+    result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
+    if result.stdout:
+        infolb.config(text=result.stdout)
+    else:
+        infolb.config(text='No user was selected or found')
+
+
+def get_user_membership(infolb):
+
+    global info
+    command = f'Get-ADPrincipalGroupMembership -Identity {username_var.get()} | select name, GroupCategory, GroupScope'
+    result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
+    if result.stdout:
+        infolb.config(text=result.stdout)
+    else:
+        infolb.config(text='No user was selected or found')
+
+
 
 def on_prem_layout():
+
     username_en = ttkb.Entry(right_frame, textvariable=username_var, width=30)
     if username_en.get:
         username_en.delete(0, tk.END)
     username_en.insert(0, 'Please enter user name')
     username_en.bind("<Button-1>", lambda e: username_en.delete(0, tk.END))
     username_en.grid(row=0, column=0, padx=5)
-    cb_options = ['Please choose an option', 'Get user statistics', 'Get user Groups', 'Get Locked out users list']
+    cb_options = ['Please choose an option', 'Get user statistics', 'Get user Groups', 'Get Locked out users list',
+                  'Get never expired users list']
     ad_oprem_cb = ttkb.Combobox(right_frame, values=cb_options, style='primary', width=30, state='readonly', textvariable=combobox_var)
     ad_oprem_cb.current(0)
     ad_oprem_cb.grid(row=0, column=1, padx=5)
