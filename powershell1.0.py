@@ -30,6 +30,8 @@ def get_index(*arg):
         get_info_var.set('3')
     elif combobox_var.get() == 'Get never expired users list':
         get_info_var.set('4')
+    elif combobox_var.get() == 'Get users last password set':
+        get_info_var.set('5')
     else:
         print('Please choose an option')
 
@@ -44,7 +46,19 @@ def selected_ps(infolb):
         get_lockedout_users(infolb)
     elif get_info_var.get() == '4':
         get_neverexpiered_users(infolb)
+    elif get_info_var.get() == '5':
+        get_users_pass_last_set(infolb)
 
+
+def get_users_pass_last_set(infolb):
+
+    global info
+    command = f'Get-ADUser -Filter * -Properties PasswordLastSet | select name, PasswordLastSet, SamAccountName'
+    result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
+    if result.stdout:
+        infolb.config(text=result.stdout)
+    else:
+        pass
 
 def get_neverexpiered_users(infolb):
 
@@ -100,7 +114,7 @@ def on_prem_layout():
     username_en.bind("<Button-1>", lambda e: username_en.delete(0, tk.END))
     username_en.grid(row=0, column=0, padx=5)
     cb_options = ['Please choose an option', 'Get user statistics', 'Get user Groups', 'Get Locked out users list',
-                  'Get never expired users list']
+                  'Get never expired users list', 'Get users last password set']
     ad_oprem_cb = ttkb.Combobox(right_frame, values=cb_options, style='primary', width=30, state='readonly', textvariable=combobox_var)
     ad_oprem_cb.current(0)
     ad_oprem_cb.grid(row=0, column=1, padx=5)
