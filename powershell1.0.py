@@ -126,6 +126,13 @@ def on_prem_layout():
     info_lbf.place(x=8, y=50)
     info_lb = ttkb.Label(info_lbf, text=info)
     info_lb.place(x=1, y=1)
+    '''v_scrollbar = ttkb.Scrollbar(info_lbf)
+    listbox = ttkb.Treeview(info_lbf, yscrollcommand=v_scrollbar.set, show='tree')
+    v_scrollbar.config(command=listbox.yview)
+    v_scrollbar.pack(side=RIGHT)
+    listbox.place(x=1, y=1)'''
+
+
 
 
 # Create Main Window
