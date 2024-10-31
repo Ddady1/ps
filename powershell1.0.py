@@ -122,15 +122,10 @@ def on_prem_layout():
     get_info_btn = ttkb.Button(right_frame, text='Get Info.', command=lambda: selected_ps(info_lb))
     get_info_btn.grid(row=0, column=2)
     info_lbf = ttkb.LabelFrame(right_frame, text='Information', width=600, height=400)
-    #info_lbf.grid(row=1, column=0, columnspan=6, sticky=W, padx=5, pady=10)
     info_lbf.place(x=8, y=50)
     info_lb = ttkb.Label(info_lbf, text=info)
     info_lb.place(x=1, y=1)
-    '''v_scrollbar = ttkb.Scrollbar(info_lbf)
-    listbox = ttkb.Treeview(info_lbf, yscrollcommand=v_scrollbar.set, show='tree')
-    v_scrollbar.config(command=listbox.yview)
-    v_scrollbar.pack(side=RIGHT)
-    listbox.place(x=1, y=1)'''
+
 
 
 
