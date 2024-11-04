@@ -65,10 +65,13 @@ def get_neverexpiered_users(infolb):
     global info
     command = f'get-aduser -filter * -properties Name, PasswordNeverExpires | where {{ $_.passwordNeverExpires -eq "true" }} | where {{$_.enabled -eq "true"}}| Format-Table -Property Name, PasswordNeverExpires -AutoSize'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
-    if result.stdout:
+    #clean_results(result.stdout)
+    '''if result.stdout:
         infolb.config(text=result.stdout)
     else:
-        infolb.config(text='Great!!! No users with Never Expired password')
+        infolb.config(text='Great!!! No users with Never Expired password')'''
+    info = clean_results(result.stdout)
+    infolb.config(text=info)
 
 
 def get_lockedout_users(infolb):
@@ -127,7 +130,38 @@ def on_prem_layout():
     info_lb.place(x=1, y=1)
 
 
+def clean_results(results) -> str:
+    strlight = ''
+    for i in results:
+        if i == ' ':
+            continue
+        else:
+            strlight += i
+    #print(strlight)
+    clean_strlight = strlight.replace('\n', ' ')
+    #print(clean_strlight)
+    '''starmoon = ''
+    for i in strlight:
+        if i == '\n':
+            continue
+        else:
+            starmoon += i
+    # print(starmoon)'''
 
+    li = list(clean_strlight.split(' '))
+    #print(li)
+    completelist = []
+    for i in li:
+        if i == '':
+            continue
+        else:
+            completelist.append(i)
+    cap_list = []
+    for i in completelist:
+        cap_list.append(i.capitalize())
+    #print(completelist)
+    print(cap_list)
+    return cap_list
 
 
 # Create Main Window
