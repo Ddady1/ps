@@ -71,7 +71,9 @@ def get_neverexpiered_users(infolb):
     else:
         infolb.config(text='Great!!! No users with Never Expired password')'''
     info = clean_results(result.stdout)
-    infolb.config(text=info)
+    info[0] = 'Never Expired Users List'
+    #infolb.config(text=info)
+    infolb.config(text=('\n'.join(info)))
 
 
 def get_lockedout_users(infolb):
