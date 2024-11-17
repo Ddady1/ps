@@ -176,7 +176,15 @@ def clean_results(results) -> str:
 
 def user_stat_2_dict(data):
     print(data)
-
+    user_var_list = [user_fullname_var, user_email_var, user_enabled_var, user_locked_var, user_pass_expired_var,
+                     user_creation_var, user_title_var]
+    complete_dict = {}
+    i = 0
+    for line in data:
+        spl = list(line.split(':'))
+        complete_dict[spl[0]] = spl[1]
+        user_var_list[i] = spl[1]
+    print(complete_dict)
 # Create Main Window
 
 window = ttkb.Window(themename='sandstone')
