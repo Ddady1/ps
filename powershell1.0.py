@@ -130,6 +130,8 @@ def on_prem_layout():
     info_lbf.place(x=8, y=50)
     info_lb = ttkb.Label(info_lbf, text=info)
     info_lb.place(x=1, y=1)
+    unlock_user_btn = ttkb.Button(right_frame, text='Unlock user account', width=20, state='disabled')
+    unlock_user_btn.place(x=620, y=58)
 
 
 def clean_results(results) -> str:
