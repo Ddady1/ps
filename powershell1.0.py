@@ -93,7 +93,10 @@ def get_user_stats(infolb):
               f' Enabled, LockedOut, PasswordExpired, whenCreated, Title'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
     if result.stdout:
-        infolb.config(text=result.stdout)
+        info = clean_results(result.stdout)
+        infolb.config(text=('\n'.join(info)))
+        #infolb.config(text=info)
+        user_stat_2_dict(info)
     else:
         infolb.config(text='No user was selected or found')
 
@@ -104,7 +107,10 @@ def get_user_membership(infolb):
     command = f'Get-ADPrincipalGroupMembership -Identity {username_var.get()} | select name, GroupCategory, GroupScope'
     result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
     if result.stdout:
-        infolb.config(text=result.stdout)
+        info = clean_results(result.stdout)
+        info[0] = 'User group list'
+        infolb.config(text=('\n'.join(info)))
+        #infolb.config(text=info)
     else:
         infolb.config(text='No user was selected or found')
 
@@ -168,6 +174,9 @@ def clean_results(results) -> str:
     return cap_list
 
 
+def user_stat_2_dict(data):
+    print(data)
+
 # Create Main Window
 
 window = ttkb.Window(themename='sandstone')
@@ -184,6 +193,13 @@ windll.shcore.SetProcessDpiAwareness(1)
 username_var = ttkb.StringVar()
 combobox_var = ttkb.StringVar()
 get_info_var = ttkb.StringVar()
+user_fullname_var = ttkb.StringVar()
+user_email_var = ttkb.StringVar()
+user_enabled_var = ttkb.BooleanVar()
+user_locked_var = ttkb.BooleanVar()
+user_pass_expired_var = ttkb.BooleanVar()
+user_creation_var = ttkb.StringVar()
+user_title_var = ttkb.StringVar()
 
 
 # Frames
