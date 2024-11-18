@@ -8,6 +8,7 @@ from ttkbootstrap import Toplevel
 from ttkbootstrap.constants import *
 from PIL import Image, ImageTk
 from tkinter import Tk
+from ttkbootstrap.dialogs import Messagebox
 
 '''img = Image.open('assets/powershell_icon.ico')
 img = img.resize((100, 100), Image.LANCZOS)'''
@@ -136,8 +137,21 @@ def on_prem_layout():
     info_lbf.place(x=8, y=50)
     info_lb = ttkb.Label(info_lbf, text=info)
     info_lb.place(x=1, y=1)
-    unlock_user_btn = ttkb.Button(right_frame, text='Unlock user account', width=20, state='disabled')
+    unlock_user_btn = ttkb.Button(right_frame, text='Unlock user account', width=20, command=lambda: unlock_user())
     unlock_user_btn.place(x=620, y=58)
+
+
+def unlock_user():
+
+    if user_locked_var.get():
+        command = f'Unlock-ADAccount -Identity {username_var.get()}'
+        result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
+        if result.returncode == 0:
+            Messagebox.ok(f'The account {username_var.get()} was released successfully')
+            user_locked_var.set(False)
+        else:
+            Messagebox.ok(f'The account {username_var.get()} was not released')
+
 
 
 def clean_results(results) -> str:
