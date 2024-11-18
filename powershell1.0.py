@@ -141,6 +141,7 @@ def on_prem_layout():
 
 
 def clean_results(results) -> str:
+    #print(results)
     strlight = ''
     for i in results:
         if i == ' ':
@@ -170,12 +171,12 @@ def clean_results(results) -> str:
     for i in completelist:
         cap_list.append(i.capitalize())
     #print(completelist)
-    print(cap_list)
+    #print(cap_list)
     return cap_list
 
 
-def user_stat_2_dict(data):
-    print(data)
+def user_stat_2_dict(data, *args):
+    #print(data)
     user_var_list = [user_fullname_var, user_email_var, user_enabled_var, user_locked_var, user_pass_expired_var,
                      user_creation_var, user_title_var]
     complete_dict = {}
@@ -183,8 +184,12 @@ def user_stat_2_dict(data):
     for line in data:
         spl = list(line.split(':'))
         complete_dict[spl[0]] = spl[1]
-        user_var_list[i] = spl[1]
+        user_var_list[i].set(spl[1])
+        i += 1
     print(complete_dict)
+
+
+    #print(user_fullname_var.get())
 # Create Main Window
 
 window = ttkb.Window(themename='sandstone')
