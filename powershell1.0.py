@@ -137,12 +137,20 @@ def on_prem_layout():
     info_lbf.place(x=8, y=50)
     info_lb = ttkb.Label(info_lbf, text=info)
     info_lb.place(x=1, y=1)
-    unlock_user_btn = ttkb.Button(right_frame, text='Unlock user account', width=20, command=lambda: unlock_user())
+    unlock_user_btn = ttkb.Button(right_frame, text='Unlock user account', width=27, command=lambda: unlock_user())
     unlock_user_btn.place(x=620, y=58)
-    enable_user_btn = ttkb.Button(right_frame, text='Enable user account', width=20, command=lambda: enable_user())
+    enable_user_btn = ttkb.Button(right_frame, text='Enable user account', width=27, command=lambda: enable_user())
     enable_user_btn.place(x=620, y=98)
-    disable_user_btn = ttkb.Button(right_frame, text='Disable user account', width=20, command=lambda: disable_user())
+    disable_user_btn = ttkb.Button(right_frame, text='Disable user account', width=27, command=lambda: disable_user())
     disable_user_btn.place(x=620, y=138)
+    reset_user_pass_btn = ttkb.Button(right_frame, text='Reset user password', width=27, command=reset_pass())
+    reset_user_pass_btn.place(x=620, y=178)
+    force_logon_checkbtn = ttkb.Checkbutton(right_frame, text='Change password on logon', bootstyle='square-toggle')
+    force_logon_checkbtn.place(x=620, y=218)
+
+
+def reset_pass():
+    pass
 
 
 def disable_user():
@@ -234,7 +242,7 @@ def user_stat_2_dict(data, *args):
 
 window = ttkb.Window(themename='sandstone')
 window.title('Powershell Toolkit')
-window.geometry('1000x600+150+150')
+window.geometry('1100x600+150+150')
 window.minsize(1000, 600)
 window.iconbitmap(img)
 
