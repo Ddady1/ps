@@ -91,7 +91,7 @@ def get_user_stats(infolb):
 
     global info
     command = f'Get-Aduser -identity {username_var.get()} -Properties * -ErrorAction Stop | fl DisplayName, EmailAddress,' \
-              f' Enabled, LockedOut, PasswordExpired, whenCreated, Title'
+              f' Enabled, LockedOut, PasswordExpired, PasswordLastSet, whenCreated, Title'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
     if result.stdout:
         info = clean_results(result.stdout)
@@ -140,7 +140,20 @@ def on_prem_layout():
     unlock_user_btn = ttkb.Button(right_frame, text='Unlock user account', width=20, command=lambda: unlock_user())
     unlock_user_btn.place(x=620, y=58)
     enable_user_btn = ttkb.Button(right_frame, text='Enable user account', width=20, command=lambda: enable_user())
-    enable_user_btn.place(x=620, y=95)
+    enable_user_btn.place(x=620, y=98)
+    disable_user_btn = ttkb.Button(right_frame, text='Disable user account', width=20, command=lambda: disable_user())
+    disable_user_btn.place(x=620, y=138)
+
+
+def disable_user():
+    if user_enabled_var.get():
+        command = f'Disable-ADAccount -Identity {username_var.get()}'
+        result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
+        if result.returncode == 0:
+            Messagebox.ok(f'The account {username_var.get().upper()} was disabled successfully')
+            user_enabled_var.set(False)
+        else:
+            Messagebox.ok(f'The account {username_var.get().upper()} was not disabled')
 
 
 def unlock_user():
@@ -205,7 +218,7 @@ def clean_results(results) -> str:
 def user_stat_2_dict(data, *args):
     #print(data)
     user_var_list = [user_fullname_var, user_email_var, user_enabled_var, user_locked_var, user_pass_expired_var,
-                     user_creation_var, user_title_var]
+                     user_pass_lastset_var, user_creation_var, user_title_var]
     complete_dict = {}
     i = 0
     for line in data:
@@ -238,6 +251,7 @@ user_email_var = ttkb.StringVar()
 user_enabled_var = ttkb.BooleanVar()
 user_locked_var = ttkb.BooleanVar()
 user_pass_expired_var = ttkb.BooleanVar()
+user_pass_lastset_var = ttkb.StringVar()
 user_creation_var = ttkb.StringVar()
 user_title_var = ttkb.StringVar()
 
