@@ -143,9 +143,9 @@ def on_prem_layout():
     enable_user_btn.place(x=620, y=98)
     disable_user_btn = ttkb.Button(right_frame, text='Disable user account', width=27, command=lambda: disable_user())
     disable_user_btn.place(x=620, y=138)
-    reset_user_pass_btn = ttkb.Button(right_frame, text='Reset user password', width=27, command=reset_pass())
+    reset_user_pass_btn = ttkb.Button(right_frame, text='Reset user password', width=27, command=lambda: reset_pass())
     reset_user_pass_btn.place(x=620, y=178)
-    force_logon_checkbtn = ttkb.Checkbutton(right_frame, text='Change password on logon', bootstyle='square-toggle',
+    force_logon_checkbtn = ttkb.Checkbutton(right_frame, text='Change password on logon', style='squared-toggle',
                                             variable=user_force_logon_var)
     force_logon_checkbtn.place(x=620, y=218)
 
@@ -170,6 +170,8 @@ def reset_pass():
         elif force_result.returncode != 0 and result.returncode != 0:
             Messagebox.ok(f'Password for {username_var.get().upper()} was NOT reset successfully AND the user'
                           f'will NOT be forced to change it on logon')
+        user_force_logon_var.set(False)
+
     else:
         command = (f'Set-ADAccountPassword -Identity {username_var.get()} '
                    f'-Reset -NewPassword (ConvertTo-SecureString -AsPlainText "Aa123456!" -Force)')
