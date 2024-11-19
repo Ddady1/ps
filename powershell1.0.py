@@ -149,21 +149,22 @@ def unlock_user():
         command = f'Unlock-ADAccount -Identity {username_var.get()}'
         result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
         if result.returncode == 0:
-            Messagebox.ok(f'The account {username_var.get()} was released successfully')
+            Messagebox.ok(f'The account {username_var.get().upper()} was released successfully')
             user_locked_var.set(False)
         else:
-            Messagebox.ok(f'The account {username_var.get()} was not released')
+            Messagebox.ok(f'The account {username_var.get().upper()} was not released')
 
 
 def enable_user():
+
     if not user_enabled_var.get():
         command = f'Enable-ADAccount -Identity {username_var.get()}'
         result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
         if result.returncode == 0:
-            Messagebox.ok(f'The account {username_var.get} was enabled successfully')
+            Messagebox.ok(f'The account {username_var.get().upper()} was enabled successfully')
             user_enabled_var.set(True)
         else:
-            Messagebox.ok(f'The account {username_var.get()} was not enabled')
+            Messagebox.ok(f'The account {username_var.get().upper()} was not enabled')
 
 
 def clean_results(results) -> str:
