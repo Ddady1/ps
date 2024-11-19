@@ -145,12 +145,39 @@ def on_prem_layout():
     disable_user_btn.place(x=620, y=138)
     reset_user_pass_btn = ttkb.Button(right_frame, text='Reset user password', width=27, command=reset_pass())
     reset_user_pass_btn.place(x=620, y=178)
-    force_logon_checkbtn = ttkb.Checkbutton(right_frame, text='Change password on logon', bootstyle='square-toggle')
+    force_logon_checkbtn = ttkb.Checkbutton(right_frame, text='Change password on logon', bootstyle='square-toggle',
+                                            variable=user_force_logon_var)
     force_logon_checkbtn.place(x=620, y=218)
 
 
 def reset_pass():
-    pass
+    if user_force_logon_var.get():
+        force_logon_command = (f'Set-ADUser -Identity {username_var.get()} -ChangePasswordAtLogon:$true')
+        force_result = subprocess.run(['powershell.exe', force_logon_command], capture_output=True, encoding='cp862')
+        command = (f'Set-ADAccountPassword -Identity {username_var.get()} '
+                    f'-Reset -NewPassword (ConvertTo-SecureString -AsPlainText "Aa123456!" -Force)')
+        result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
+        if force_result.returncode == 0 and result.returncode == 0:
+            Messagebox.ok(f'Password for {username_var.get().upper()} was reset successfully to Aa123456! and user'
+                          f'will be forced to change it on logon')
+        elif force_result.returncode != 0 and result.returncode == 0:
+            Messagebox.ok(f'Password for {username_var.get().upper()} was reset successfully to Aa123456! BUT the user'
+                          f'will not be forced to change it on logon')
+        elif force_result.returncode == 0 and result.returncode != 0:
+            Messagebox.ok(f'Password for {username_var.get().upper()} was NOT reset successfully! BUT the user'
+                          f'will be forced to change it on logon')
+        elif force_result.returncode != 0 and result.returncode != 0:
+            Messagebox.ok(f'Password for {username_var.get().upper()} was NOT reset successfully AND the user'
+                          f'will NOT be forced to change it on logon')
+    else:
+        command = (f'Set-ADAccountPassword -Identity {username_var.get()} '
+                   f'-Reset -NewPassword (ConvertTo-SecureString -AsPlainText "Aa123456!" -Force)')
+        result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
+        if result.returncode == 0:
+            Messagebox.ok(f'Password for {username_var.get().upper()} was reset successfully to Aa123456!')
+        else:
+            Messagebox.ok(f'Password for {username_var.get().upper()} was NOT reset successfully!')
+
 
 
 def disable_user():
@@ -242,7 +269,7 @@ def user_stat_2_dict(data, *args):
 
 window = ttkb.Window(themename='sandstone')
 window.title('Powershell Toolkit')
-window.geometry('1100x600+150+150')
+window.geometry('1050x600+150+150')
 window.minsize(1000, 600)
 window.iconbitmap(img)
 
@@ -262,6 +289,7 @@ user_pass_expired_var = ttkb.BooleanVar()
 user_pass_lastset_var = ttkb.StringVar()
 user_creation_var = ttkb.StringVar()
 user_title_var = ttkb.StringVar()
+user_force_logon_var = ttkb.BooleanVar()
 
 
 # Frames
