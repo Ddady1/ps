@@ -152,11 +152,12 @@ def on_prem_layout():
 
 def reset_pass():
     if user_force_logon_var.get():
-        force_logon_command = (f'Set-ADUser -Identity {username_var.get()} -ChangePasswordAtLogon:$true')
-        force_result = subprocess.run(['powershell.exe', force_logon_command], capture_output=True, encoding='cp862')
+
         command = (f'Set-ADAccountPassword -Identity {username_var.get()} '
                     f'-Reset -NewPassword (ConvertTo-SecureString -AsPlainText "Aa123456!" -Force)')
         result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
+        force_logon_command = (f'Set-ADUser -Identity {username_var.get()} -ChangePasswordAtLogon:$true')
+        force_result = subprocess.run(['powershell.exe', force_logon_command], capture_output=True, encoding='cp862')
         if force_result.returncode == 0 and result.returncode == 0:
             Messagebox.ok(f'Password for {username_var.get().upper()} was reset successfully to Aa123456! and user'
                           f'will be forced to change it on logon')
@@ -179,8 +180,8 @@ def reset_pass():
             Messagebox.ok(f'Password for {username_var.get().upper()} was NOT reset successfully!')
 
 
-
 def disable_user():
+
     if user_enabled_var.get():
         command = f'Disable-ADAccount -Identity {username_var.get()}'
         result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
