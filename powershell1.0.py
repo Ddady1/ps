@@ -139,6 +139,8 @@ def on_prem_layout():
     info_lb.place(x=1, y=1)
     unlock_user_btn = ttkb.Button(right_frame, text='Unlock user account', width=20, command=lambda: unlock_user())
     unlock_user_btn.place(x=620, y=58)
+    enable_user_btn = ttkb.Button(right_frame, text='Enable user account', width=20, command=lambda: enable_user())
+    enable_user_btn.place(x=620, y=95)
 
 
 def unlock_user():
@@ -152,6 +154,16 @@ def unlock_user():
         else:
             Messagebox.ok(f'The account {username_var.get()} was not released')
 
+
+def enable_user():
+    if not user_enabled_var.get():
+        command = f'Enable-ADAccount -Identity {username_var.get()}'
+        result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
+        if result.returncode == 0:
+            Messagebox.ok(f'The account {username_var.get} was enabled successfully')
+            user_enabled_var.set(True)
+        else:
+            Messagebox.ok(f'The account {username_var.get()} was not enabled')
 
 
 def clean_results(results) -> str:
