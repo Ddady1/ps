@@ -135,7 +135,7 @@ def on_prem_layout():
     get_info_btn.grid(row=0, column=2)
     info_lbf = ttkb.LabelFrame(right_frame, text='Information', width=600, height=400)
     info_lbf.place(x=8, y=50)
-    info_lb = ttkb.Label(info_lbf, text=info)
+    info_lb = ttkb.Label(info_lbf, text=info, font=('Helvetica', 18))
     info_lb.place(x=1, y=1)
     unlock_user_btn = ttkb.Button(right_frame, text='Unlock user account', width=27, command=lambda: unlock_user())
     unlock_user_btn.place(x=620, y=58)
