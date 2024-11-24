@@ -1,16 +1,27 @@
-# This is a sample Python script.
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = ttk.Window(size=(500, 500))
 
+gauge = ttk.Floodgauge(
+    bootstyle=INFO,
+    font=(None, 24, 'bold'),
+    mask='Memory Used {}%',
+)
+gauge.pack(fill=BOTH, expand=YES, padx=10, pady=10)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# autoincrement the gauge
+gauge.start()
 
+# stop the autoincrement
+gauge.stop()
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+# manually update the gauge value
+gauge.configure(value=0)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# increment the value by 10 steps
+for i in range(100):
+    gauge.step(i)
+    i +=5
+
+app.mainloop()
