@@ -8,7 +8,7 @@ import threading
 
 
 def progress_bar():
-
+    active_check()
     checking_lb.place(x=10, y=200)
     pb.place(x=15, y=250)
     pb['value'] = 0
@@ -17,6 +17,7 @@ def progress_bar():
         window.update()
         time.sleep(0.3)
     cancel_finish_btn.configure(text='Finish')
+    results()
 
 
 def exit():
@@ -30,13 +31,20 @@ def exit():
 
 
 
+def active_check():
+    command = 'Get-Module -Name ActiveDirectory -ListAvailable | select Name'
+    result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
+    if result.returncode == 0:
+        active_directory_var.set(True)
+        print(active_directory_var.get())
+    else:
+        print(result.stderr)
 
-command = 'Get-Module -Name ActiveDirectory -ListAvailable | select Name'
-result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
-if result.returncode == 0:
-    print(result.stdout)
-else:
-    print(result.stderr)
+
+def results():
+    if active_directory_var.get():
+        results_text_txt.place(x=10, y=280)
+
 # assets
 
 
@@ -47,6 +55,13 @@ window = ttkb.Window(themename='sandstone')
 window.title('Powershell Toolkit Prerequisites')
 window.geometry('600x400+150+150')
 window.minsize(600, 400)
+
+
+# Variables
+
+active_directory_var = ttkb.BooleanVar()
+
+
 #window.iconbitmap(img)
 chk_win_image = Image.open('assets/powershell_img.png')
 re_chk_win_image = chk_win_image.resize((50, 50))
@@ -73,6 +88,9 @@ cancel_finish_btn.place(x=505, y=360)
 
 pb = ttkb.Progressbar(window, orient='horizontal', mode='determinate', length=550, style='success')
 #pb.place(x=20, y=250)
+
+results_text_txt = tk.Text(window, width=90, height=4)
+results_text_txt.place_forget()
 
 
 windll.shcore.SetProcessDpiAwareness(1)
