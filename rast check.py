@@ -4,16 +4,32 @@ import tkinter as tk
 import ttkbootstrap as ttkb
 from ctypes import windll
 from PIL import Image, ImageTk
+import threading
 
 
 def progress_bar():
+
+    checking_lb.place(x=10, y=200)
     pb.place(x=15, y=250)
     pb['value'] = 0
     while pb['value'] < 100:
         pb['value'] += 4
-        window.update_idletasks()
+        window.update()
         time.sleep(0.3)
     cancel_finish_btn.configure(text='Finish')
+
+
+def exit():
+    '''btn_text = cancel_finish_btn.cget('text')
+    if btn_text == 'Cancel':
+        #pb.stop()
+        window.forget()
+    else:
+        window.forget'''
+    window.destroy()
+
+
+
 
 command = 'Get-Module -Name ActiveDirectory -ListAvailable | select Name'
 result = subprocess.run(['powershell.exe', command], capture_output=True, encoding='cp862')
@@ -48,14 +64,16 @@ main_lb.place(x=10, y=10)
 checking_lb = ttkb.Label(text="Checking for necessary dependencies...", font=('Helvetica', 18), style='primary', state='disabled')
 checking_lb.place_forget()
 
-go_btn = ttkb.Button(main_lbf, text='GO!!!', style='success', command=lambda: [checking_lb.place(x=10, y=200), progress_bar()])
+#go_btn = ttkb.Button(main_lbf, text='GO!!!', style='success', command=lambda: progress_bar())
+go_btn = ttkb.Button(main_lbf, text='GO!!!', style='success', command=lambda: threading.Thread(target=progress_bar, daemon=True).start())
 go_btn.place(x=510, y=40)
 
-cancel_finish_btn = ttkb.Button(window, text='Cancel', width=10, command=window.quit)
+cancel_finish_btn = ttkb.Button(window, text='Cancel', width=10, command=exit)
 cancel_finish_btn.place(x=505, y=360)
 
-pb = ttkb.Progressbar(window, orient='horizontal', mode='determinate', length=550, style='success-striped')
+pb = ttkb.Progressbar(window, orient='horizontal', mode='determinate', length=550, style='success')
 #pb.place(x=20, y=250)
+
 
 windll.shcore.SetProcessDpiAwareness(1)
 
