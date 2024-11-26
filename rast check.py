@@ -44,6 +44,8 @@ def active_check():
 def results():
     if active_directory_var.get():
         results_text_txt.place(x=10, y=280)
+        results_text_txt.insert(tk.END, 'All necessary dependencies are present.\n'
+                                        'Please click on "Finish" to close the tool.')
 
 # assets
 
@@ -89,7 +91,7 @@ cancel_finish_btn.place(x=505, y=360)
 pb = ttkb.Progressbar(window, orient='horizontal', mode='determinate', length=550, style='success')
 #pb.place(x=20, y=250)
 
-results_text_txt = tk.Text(window, width=90, height=4)
+results_text_txt = tk.Text(window, width=90, height=4, font=('Helvetica', 10), foreground='blue')
 results_text_txt.place_forget()
 
 
