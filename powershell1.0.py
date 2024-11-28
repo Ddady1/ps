@@ -91,7 +91,7 @@ def get_user_stats(infolb):
 
     global info
     command = f'Get-Aduser -identity {username_var.get()} -Properties * -ErrorAction Stop | fl DisplayName, EmailAddress,' \
-              f' Enabled, LockedOut, PasswordExpired, PasswordLastSet, whenCreated, Title'
+              f' Enabled, LockedOut, PasswordExpired, PasswordLastSet, whenCreated, BadLogonCount, Title'
     result = subprocess.run(['powershell.exe', command], capture_output=True, text=True)
     if result.stdout:
         info = clean_results(result.stdout)
