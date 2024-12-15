@@ -9,8 +9,8 @@ import threading
 
 def progress_bar():
     active_check()
-    checking_lb.place(x=10, y=200)
-    pb.place(x=15, y=250)
+    checking_lb.place(x=10, y=180)
+    pb.place(x=15, y=230)
     pb['value'] = 0
     while pb['value'] < 100:
         pb['value'] += 4
@@ -43,8 +43,8 @@ def active_check():
 
 def results():
     if active_directory_var.get():
-        results_text_txt.place(x=10, y=280)
-        results_text_txt.insert(tk.END, 'All necessary dependencies are present.\n'
+        results_text_txt.place(x=10, y=250)
+        results_text_txt.insert(tk.END, '\nAll necessary dependencies are present.\n'
                                         'Please click on "Finish" to close the tool.')
 
 # assets
@@ -72,7 +72,7 @@ chk_win_img_lb = ttkb.Label(window, image=img)
 chk_win_img_lb.place(x=10, y=10)
 
 main_lbf = ttkb.LabelFrame(window, text="Info", width=580, height=100)
-main_lbf.place(x=10, y=90)
+main_lbf.place(x=10, y=70)
 
 main_lb = ttkb.Label(main_lbf, text='This tool will check if your computer has the neccessary modules in order for the \napp '
                           '"Powershell Toolkit" to work. \nPress the "GO" button to start the checking.', font=('Helvetica', 12), style='primary')
@@ -91,7 +91,7 @@ cancel_finish_btn.place(x=505, y=360)
 pb = ttkb.Progressbar(window, orient='horizontal', mode='determinate', length=550, style='success')
 #pb.place(x=20, y=250)
 
-results_text_txt = tk.Text(window, width=90, height=4, font=('Helvetica', 10), foreground='blue')
+results_text_txt = tk.Text(window, width=81, height=5, font=('Helvetica', 10), foreground='blue')
 results_text_txt.place_forget()
 
 
