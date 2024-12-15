@@ -120,6 +120,7 @@ def get_user_membership(infolb):
 def on_prem_layout():
 
     username_en = ttkb.Entry(right_frame, textvariable=username_var, width=30)
+
     if username_en.get:
         username_en.delete(0, tk.END)
     username_en.insert(0, 'Please enter user name')
@@ -267,6 +268,13 @@ def user_stat_2_dict(data, *args):
     print(complete_dict)
 
 
+def change_theme():
+    if dark_light_theme_var.get():
+        ttkb.Style('superhero')
+    else:
+        ttkb.Style('sandstone')
+
+
     #print(user_fullname_var.get())
 # Create Main Window
 
@@ -275,6 +283,7 @@ window.title('Powershell Toolkit')
 window.geometry('1050x600+150+150')
 window.minsize(1000, 600)
 window.iconbitmap(img)
+
 
 windll.shcore.SetProcessDpiAwareness(1)
 
@@ -293,6 +302,8 @@ user_pass_lastset_var = ttkb.StringVar()
 user_creation_var = ttkb.StringVar()
 user_title_var = ttkb.StringVar()
 user_force_logon_var = ttkb.BooleanVar()
+dark_light_theme_var = ttkb.BooleanVar()
+
 
 
 # Frames
@@ -318,6 +329,7 @@ azure_ad_btn = ttkb.Button(left_frame, text='Azure Active Directory')
 # bottom frame buttons
 
 exit_btn = ttkb.Button(bottom_frame, text='Exit', width=15, command=exit_btn)
+theme_check_btn = ttkb.Checkbutton(bottom_frame, text='Dark Theme', style='rounded-toggle', variable=dark_light_theme_var, command=change_theme)
 
 
 # Left frame buttons layout
@@ -329,6 +341,7 @@ azure_ad_btn.grid(row=1, column=0, sticky=W, pady=10)
 # Bottom frame buttons layout
 bottom_frame.columnconfigure((0, 1, 2, 3, 4), weight=1, uniform='a')
 exit_btn.grid(row=0, column=4, sticky=E, pady=5)
+theme_check_btn.grid(row=0, column=0, sticky=W)
 
 # Right frame buttons + widgets layout
 
