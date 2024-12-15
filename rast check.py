@@ -46,6 +46,10 @@ def results():
         results_text_txt.place(x=10, y=250)
         results_text_txt.insert(tk.END, '\nAll necessary dependencies are present.\n'
                                         'Please click on "Finish" to close the tool.')
+    else:
+        results_text_txt.insert(tk.END, '\n Missing RSAT module. WIN10 - Please download and install from the following link:\n'
+                                        'link\n'
+                                        'WIN11 - Please install from within windows features')
 
 # assets
 
