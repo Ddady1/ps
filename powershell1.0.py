@@ -270,7 +270,7 @@ def user_stat_2_dict(data, *args):
 
 def change_theme():
     if dark_light_theme_var.get():
-        ttkb.Style('superhero')
+        ttkb.Style('darkly')
         theme_check_btn.configure(text='Light Theme')
     else:
         ttkb.Style('sandstone')
