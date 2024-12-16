@@ -257,11 +257,12 @@ def clean_results(results) -> str:
 def user_stat_2_dict(data, *args):
     #print(data)
     user_var_list = [user_fullname_var, user_email_var, user_enabled_var, user_locked_var, user_pass_expired_var,
-                     user_pass_lastset_var, user_creation_var, user_title_var]
+                     user_pass_lastset_var, user_creation_var, user_badlogoncount_var, user_title_var]
     complete_dict = {}
     i = 0
     for line in data:
         spl = list(line.split(':'))
+        #print(spl)
         complete_dict[spl[0]] = spl[1]
         user_var_list[i].set(spl[1])
         i += 1
@@ -302,6 +303,7 @@ user_locked_var = ttkb.BooleanVar()
 user_pass_expired_var = ttkb.BooleanVar()
 user_pass_lastset_var = ttkb.StringVar()
 user_creation_var = ttkb.StringVar()
+user_badlogoncount_var = ttkb.BooleanVar()
 user_title_var = ttkb.StringVar()
 user_force_logon_var = ttkb.BooleanVar()
 dark_light_theme_var = ttkb.BooleanVar()
